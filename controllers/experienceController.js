@@ -1,0 +1,24 @@
+import Experience from "../models/Experience.js";
+
+export const getExperience = async (req, res) => {
+  res.json(await Experience.find().sort({ order: 1, createdAt: -1 }));
+};
+
+export const createExperience = async (req, res) => {
+  res.status(201).json(await Experience.create(req.body));
+};
+
+export const updateExperience = async (req, res) => {
+  const item = await Experience.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+  if (!item) return res.status(404).json({ message: "That entry isn't here." });
+  res.json(item);
+};
+
+export const deleteExperience = async (req, res) => {
+  const item = await Experience.findByIdAndDelete(req.params.id);
+  if (!item) return res.status(404).json({ message: "That entry isn't here." });
+  res.json({ message: "Entry deleted." });
+};
